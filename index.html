@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="include/vendors/bootstrap.min.css">
+    <link rel="stylesheet" href="include/css/style.css">
+    <link rel="stylesheet" href="include/vendors/leaflet/leaflet.css">
+    <link rel="stylesheet" href="dist/css/leaflet.extra-markers.min.css">
+    <link rel="stylesheet" href="include/vendors/markerCluster/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="include/vendors/markerCluster/dist/MarkerCluster.Default.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300&family=Source+Sans+Pro:wght@300&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://kit.fontawesome.com/92644e6b33.js" crossorigin="anonymous"></script>
+
+    <title>Gazetteer</title>
+
+</head>
+<body>
+    <div id="wrapper"> 
+        <div id="preloader"></div>
+        <nav class="justify-content-center top-nav">
+            <h1>Gazetteer</h1>
+            <select id="countrySelect" class="m-4">
+                <option disabled>Pick a Country</option> 
+            </select>
+        </nav>
+        <!-- Map -->
+        <div id="worldMap"></div>
+        <img src="include/images/icons/info.png" id="info">
+
+        <!-- Data display -->
+        <div class="card" id="dataDisplay">
+            <div class="card-header text-center d-flex flex-column justify-content-center">
+                <button type="button" id="close" class="btn-close" aria-label="Close"></button>
+                <h2 id="countryName" class="text-uppercase">United Kingdom</h2>
+                <h3 id="capitalCity">London</h3>
+            </div>
+            <div class="card-body p-0" id="cardMain">
+                <ul class="nav nav-pills m-3 d-flex flex-row justify-content-center" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="pills-stats-tab" data-bs-toggle="pill" href="#pills-stats" role="tab" aria-controls="pills-stats" aria-selected="true"><img class="tabIcon" src="include/images/icons/stats.png"></a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-weather-tab" data-bs-toggle="pill" href="#pills-weather" role="tab" aria-controls="pills-weather" aria-selected="false"><img class="tabIcon" src="include/images/icons/weather.png"></a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-people-tab" data-bs-toggle="pill" href="#pills-people" role="tab" aria-controls="pills-people" aria-selected="false"><img class="tabIcon" src="include/images/icons/people.png"></a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-currency-tab" data-bs-toggle="pill" href="#pills-currency" role="tab" aria-controls="pills-currency" aria-selected="false"><img class="tabIcon" src="include/images/icons/currency.png"></a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="pills-covid-tab" data-bs-toggle="pill" href="#pills-covid" role="tab" aria-controls="pills-covid" aria-selected="false"><img class="tabIcon" src="include/images/icons/virus.svg"></a>
+                    </li>
+                </ul>
+                <div class="tab-content overflow-auto" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-stats" role="tabpanel" aria-labelledby="pills-stats-tab">
+                        <h4 class="m-3 text-center">Statistics</h4>
+                        <table class="table table-info table-striped m-0 align-middle">
+                            <tr>
+                                <td class="left">Neighbours </td>
+                                <td class="right" id="neighbourCountries"></td>
+                            </tr>
+                            <tr>
+                                <td class="left text-nowrap">Calling Code </td>
+                                <td class="right">+<span id="callingCode"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="left">Drive On </td>
+                                <td class="right text-capitalize" id="driving"></td>
+                            </tr>
+                            <tr>
+                                <td class="left text-nowrap">Time Zone </td>
+                                <td class="right" id="timeZone"></td>
+                            </tr>
+                            <tr>
+                                <td class="left text-nowrap">Current Time </td>
+                                <td class="right" id="currentTime"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">Sunrise </td>
+                                <td class="right" id="sunrise"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">Sunset </td>
+                                <td class="right" id="sunset"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><img id="flag" class="image mx-auto" src=""></td>
+                            </tr>
+                        </table>
+                    </div>
+                        
+                    <div class="tab-pane fade" id="pills-weather" role="tabpanel" aria-labelledby="pills-weather-tab">
+                        <h4 class="m-3 text-center">Weather</h4>
+                            <table class="table table-info table-striped m-0 align-middle">
+                                <tr>
+                                    <td class="left">Description </td>
+                                    <td class="right text-capitalize" id="weatherDesc"></td>
+                                </tr>
+                                <tr>
+                                    <td class="left">Temperature </td>
+                                    <td class="right"><span id="temp"></span>&#176 c</td>
+                                </tr>
+                                <tr>
+                                    <td class="left">Feels Like </td>
+                                    <td class="right"><span id="feelsLike"></span>&#176 c</td>
+                                </tr>
+                                <tr>
+                                    <td class="left">Humidity </td>
+                                    <td class="right"><span id="humidity"></span>%</td>
+                                </tr>
+                                <tr>
+                                    <td class="left">Wind Speed </td>
+                                    <td class="right"><span id="windSpeed"></span> m/s</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><img id="weatherSymbol" class="image mx-auto" src=""></td>
+                                </tr>
+                            </table>
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-people" role="tabpanel" aria-labelledby="pills-people-tab">
+                        <h4 class="m-3 text-center">People</h4>
+                        <table class="table table-info table-striped m-0 align-middle">
+                            <tr>
+                                <td class="left">Population </td>
+                                <td class="right" id="population"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">Language </td>
+                                <td class="right text-capitalize" id="language"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-center">"Hello, how are you today?"
+                                    <br>
+                                    <span id="translation"></span>
+                                </td>
+                            </tr>
+                        </table>
+                        
+                        <h4 class="m-3 text-center">Wikipedia Links</h4>
+                        <table class="table table-info table-striped m-0 align-middle">
+                            <tr>
+                                <td colspan="2" class="text-center"><a id="wiki1" href="" target="_blank"></a></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-center"><a id="wiki2" href="" target="_blank"></a></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-center"><a id="wiki3" href="" target="_blank"></a></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><img id="imgurImg" class="image mx-auto" src=""></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane fade show" id="pills-currency" role="tabpanel" aria-labelledby="pills-currency-tab">
+                        <h4 class="m-3 text-center">Currency</h4>
+                        <table class="table table-info table-striped m-0 align-middle">
+                            <tr>
+                                <td class="left">Currency </td>
+                                <td class="right text-capitalize" id="currency"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">Currency Code </td>
+                                <td class="right" id="currCode"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">Symbol </td>
+                                <td class="right" id="currSymbol"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">Exchange Rate </td>
+                                <td class="right">£1 = <span id="currSymbol2"> </span><span id="exchangeRate"></span></td>
+                            </tr>
+                        </table>    
+                    </div>
+
+                    <div class="tab-pane fade show" id="pills-covid" role="tabpanel" aria-labelledby="pills-covid-tab">
+                        <h4 class="m-3 text-center">Covid</h4>
+                        <table class="table table-info table-striped m-0 align-middle">
+                            <tr>
+                                <td class="left">Population </td>
+                                <td class="right" id="population2"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">Total Cases </td>
+                                <td class="right" id="totalCases"></td>
+                            </tr>
+                            <tr>
+                                <td class="left text-nowrap">% Population Affected </td>
+                                <td class="right"><span id="popAffected"></span>%</td>
+                            </tr>
+                            <tr>
+                                <td class="left">Total Recovered </td>
+                                <td class="right" id="recovered"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">% Recovered </td>
+                                <td class="right"><span  id="percRecovered"></span>%</td>
+                            </tr>
+                            <tr>
+                                <td class="left">Total Deaths </td>
+                                <td class="right" id="deaths"></td>
+                            </tr>
+                            <tr>
+                                <td class="left">% Deaths </td>
+                                <td class="right"><span id="percDeaths"></span>%</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>          
+
+
+
+
+
+
+
+<script src="include/vendors/leaflet/leaflet.js"></script>
+<script src="include/vendors/jquery-3.5.1.min.js"></script>
+<script src="include/vendors/bootstrap.min.js"></script>
+<script src="dist/js/leaflet.extra-markers.min.js"></script>
+<script src="include/vendors/markerCluster/dist/leaflet.markercluster.js"></script>
+<script src="include/js/app.js"></script>
+
+</body>
+</html>
