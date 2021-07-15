@@ -1,0 +1,239 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+}
+
+/* Text */
+p {
+    font-size: 1.5rem;
+}
+
+p.small {
+    font-size: 1rem;
+    margin: 0px; 
+}
+
+h1, 
+h2, 
+h3, 
+h4, 
+table {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+nav h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    display: none;
+}
+
+@media only screen and (min-width: 780px) {
+    nav h1 {
+        display: inline;
+    }
+} 
+
+/* Search Bar */
+nav.top-nav {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center; /*this can be bootstrap*/
+    background: #0F625A;
+    border-radius: 20px 5px;
+    z-index: 1;
+}
+
+select {
+    width: 300px;
+    padding: 5px 5px 5px 25px;
+    border-radius: 10px 5px;
+    background-image: url("/include/images/icons/search.png");
+    background-size: 15px;
+    background-position: 5px 7px;
+    background-repeat: no-repeat;
+}
+
+
+/* Map */
+#worldMap { 
+    margin: 10px;
+    height: calc(100vh - 110px);
+    border-radius: 20px 5px;
+    z-index: 0;
+}
+
+#info {
+    width: 80px;
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+    filter: drop-shadow(2px 2px 2px);
+    cursor: pointer;
+    animation: none 0.7s linear both;
+}
+
+#info:hover {
+    opacity: 0.9;
+}
+
+#info:active {
+    transform: scale(0.95);
+}
+
+
+/* Data Display */
+#dataDisplay {
+    height: 80vh;
+    width: 80vw;
+    background: #0F625A;
+    border: 2px solid rgb(0,0,0,0.4);
+    border-radius: 20px 5px;
+    display: none;
+    position: absolute;
+    top: 0;
+    z-index: 2;
+}
+
+#close {
+    position: relative;
+    top: 20px;
+}
+
+#countryName {
+    font-size: 1.3rem;
+}
+
+.tabIcon {
+    width: 40px;
+    padding: 2px;
+    margin: 2px;
+}
+
+.nav-link {
+    padding: 2px;
+}
+
+.card-header {
+    height: 150px;
+}
+
+.tab-content,
+#cardMain {
+    height: calc(80vh - 250px);
+}
+
+.image {
+    width: 200px;
+    display: block;
+}
+
+@media only screen and (min-width: 700px) { 
+    #dataDisplay {
+        width: 500px;
+        height: 750px;
+        margin-top: 100px;
+        margin-left: 100px;
+    } 
+
+    .tab-content,
+    #cardMain {
+        height: 430px;
+    }
+
+    .tabIcon {
+        width: 60px;
+    }
+
+    .nav-link {
+        padding: 5px;
+    }
+
+    .card-header {
+        height: 150px;
+    }
+}
+
+/* Table */
+
+tr {
+    height: 40px;
+}
+
+table .left {
+    text-align: left;
+    padding-left: 20px;
+}
+
+table .right {
+    text-align: right;
+    padding-right: 20px;
+}
+
+@media only screen and (min-width: 700px) { 
+    tr {
+        min-height: 50px;
+    }
+
+    table .left {
+        text-align: left;
+        padding-left: 60px;
+    }
+    
+    table .right {
+        text-align: right;
+        padding-right: 60px;
+    }
+}
+
+/*Preloader */
+#preloader {  
+    position: fixed;  
+    top: 0;  
+    left: 0;  
+    right: 0;  
+    bottom: 0;  
+    z-index: 9999;  
+    overflow: hidden;  
+    background: #fff;
+}
+
+#preloader:before {  
+    content: "";  
+    position: fixed;  
+    top: calc(50% - 30px);  
+    left: calc(50% - 30px);  
+    border: 6px solid #f2f2f2;  
+    border-top: 6px solid #0F625A;  
+    border-radius: 50%;  
+    width: 60px;  
+    height: 60px;  
+    -webkit-animation: animate-preloader 1s linear infinite;  
+    animation: animate-preloader 1s linear infinite;
+}
+
+@-webkit-keyframes animate-preloader {
+     0% {    
+         -webkit-transform: rotate(0deg);    
+         transform: rotate(0deg);  
+    }  
+    100% {    
+        -webkit-transform: rotate(360deg);    
+        transform: rotate(360deg);  
+    }
+}
+
+@keyframes animate-preloader {  
+    0% {    
+        -webkit-transform: rotate(0deg);    
+        transform: rotate(0deg);  
+    }  
+    100% {    
+        -webkit-transform: rotate(360deg);    
+        transform: rotate(360deg);  
+    }
+}

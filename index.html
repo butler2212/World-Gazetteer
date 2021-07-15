@@ -21,9 +21,9 @@
     <div id="wrapper"> 
         <div id="preloader"></div>
         <nav class="justify-content-center top-nav">
-            <h1>Gazetteer</h1>
+            <h1 class="text-light">Gazetteer</h1>
             <select id="countrySelect" class="m-4">
-                <option disabled>Pick a Country</option> 
+                <option selected="GB">Pick your Country</option> 
             </select>
         </nav>
         <!-- Map -->
@@ -34,8 +34,8 @@
         <div class="card" id="dataDisplay">
             <div class="card-header text-center d-flex flex-column justify-content-center">
                 <button type="button" id="close" class="btn-close" aria-label="Close"></button>
-                <h2 id="countryName" class="text-uppercase">United Kingdom</h2>
-                <h3 id="capitalCity">London</h3>
+                <h2 id="countryName" class="text-uppercase text-light"></h2>
+                <h3 id="capitalCity" class= "text-light">London</h3>
             </div>
             <div class="card-body p-0" id="cardMain">
                 <ul class="nav nav-pills m-3 d-flex flex-row justify-content-center" id="pills-tab" role="tablist">
@@ -57,7 +57,7 @@
                 </ul>
                 <div class="tab-content overflow-auto" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-stats" role="tabpanel" aria-labelledby="pills-stats-tab">
-                        <h4 class="m-3 text-center">Statistics</h4>
+                        <h4 class="m-3 text-center text-light">Statistics</h4>
                         <table class="table table-info table-striped m-0 align-middle">
                             <tr>
                                 <td class="left">Neighbours </td>
@@ -94,7 +94,7 @@
                     </div>
                         
                     <div class="tab-pane fade" id="pills-weather" role="tabpanel" aria-labelledby="pills-weather-tab">
-                        <h4 class="m-3 text-center">Weather</h4>
+                        <h4 class="m-3 text-center text-light">Weather</h4>
                             <table class="table table-info table-striped m-0 align-middle">
                                 <tr>
                                     <td class="left">Description </td>
@@ -123,7 +123,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="pills-people" role="tabpanel" aria-labelledby="pills-people-tab">
-                        <h4 class="m-3 text-center">People</h4>
+                        <h4 class="m-3 text-center text-light">People</h4>
                         <table class="table table-info table-striped m-0 align-middle">
                             <tr>
                                 <td class="left">Population </td>
@@ -141,7 +141,7 @@
                             </tr>
                         </table>
                         
-                        <h4 class="m-3 text-center">Wikipedia Links</h4>
+                        <h4 class="m-3 text-center text-light">Wikipedia Links</h4>
                         <table class="table table-info table-striped m-0 align-middle">
                             <tr>
                                 <td colspan="2" class="text-center"><a id="wiki1" href="" target="_blank"></a></td>
@@ -159,7 +159,7 @@
                     </div>
 
                     <div class="tab-pane fade show" id="pills-currency" role="tabpanel" aria-labelledby="pills-currency-tab">
-                        <h4 class="m-3 text-center">Currency</h4>
+                        <h4 class="m-3 text-center text-light">Currency</h4>
                         <table class="table table-info table-striped m-0 align-middle">
                             <tr>
                                 <td class="left">Currency </td>
@@ -175,13 +175,13 @@
                             </tr>
                             <tr>
                                 <td class="left">Exchange Rate </td>
-                                <td class="right">£1 = <span id="currSymbol2"> </span><span id="exchangeRate"></span></td>
+                                <td class="right">€1 = <span id="currSymbol2"> </span><span id="exchangeRate"></span></td>
                             </tr>
                         </table>    
                     </div>
 
                     <div class="tab-pane fade show" id="pills-covid" role="tabpanel" aria-labelledby="pills-covid-tab">
-                        <h4 class="m-3 text-center">Covid</h4>
+                        <h4 class="m-3 text-center text-light">Covid</h4>
                         <table class="table table-info table-striped m-0 align-middle">
                             <tr>
                                 <td class="left">Population </td>
