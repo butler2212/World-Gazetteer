@@ -52,7 +52,6 @@ select {
     width: 300px;
     padding: 5px 5px 5px 25px;
     border-radius: 10px 5px;
-    background-image: url("/include/images/icons/search.png");
     background-size: 15px;
     background-position: 5px 7px;
     background-repeat: no-repeat;
