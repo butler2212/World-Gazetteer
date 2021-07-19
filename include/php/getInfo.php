@@ -9,7 +9,7 @@ $count = $_REQUEST['count'];
 
 //Fill Select
 if ($count < 1) {
-    $countryData = json_decode(file_get_contents("../js/countries.json"), true);
+    $countryData = json_decode(file_get_contents("../js/countryBorders.geo.json"), true);
     $country = [];
     foreach ($countryData['features'] as $feature) {
         $temp = null;
@@ -227,36 +227,6 @@ else {
     $output['data']['covid'] = $decodeCovid; 
     $output['data']['covid']['executedIn'] = intval((microtime(true) - $covidStartTime) * 1000) . " ms";
 }
-
-
-
-
-//Google Translate API Call
-$url = "https://language-translation.p.rapidapi.com/translateLanguage/translate?text=Hello!%20How%20are%20you%20today%3F&type=plain&target=" . $language;
-$ch = curl_init();
-
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-curl_setopt($ch, CURLOPT_HTTPHEADER, ["x-rapidapi-host: language-translation.p.rapidapi.com", "x-rapidapi-key: "]);
-curl_setopt($ch, CURLOPT_FAILONERROR, true);
-$result = curl_exec($ch);
-$err = curl_error($curl);
-curl_close($ch);
-$decodeTranslate = json_decode($result,true);
-$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-if ($result === false) {
-    $error_msg = curl_error($ch);
-    $output['status']['translate'] = $responseCode;
-}
-else {
-    $output['status']['translate'] = '200';
-    $output['data']['translate'] = $decodeTranslate;
-} */
-
-
 
 
 //Open Exchange Rates API Call
