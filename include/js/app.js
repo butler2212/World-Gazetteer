@@ -6,37 +6,22 @@ $(window).on('load', function () {
         });
     }});
 
-
 //Set up global variables.
-let worldMap;
-let countryCode;
-let geoJSONLayer; 
-let bounds;
-let capitalMarker;
-let boundaries = [
-    [-85.18289, -262.795597],
-    [84.937126, 232.296248]
-];
-let longitude;
-let latitude;
-let landmarkLayer;
-let hotelLayer;
-let searchCount = 0;
-
-
-//Set up map. 
-function createMap() {
-    worldMap = L.map('worldMap').setView([53.800755, -1.549077], 6);
+var  globalMap = L.map('globalMap');
     const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     const tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     const tiles = L.tileLayer(tileURL, {attribution});
     tiles.addTo(worldMap);
-    worldMap.setMinZoom(3);
-    worldMap.setMaxBounds(boundaries);
-}
-
-createMap();
-
+    globalMap.setMinZoom(3),
+    countryCode,
+    geoJSONLayer, 
+    bounds,
+    capitalMarker,
+    longitude,
+    latitude,
+    landmarkLayer,
+    hotelLayer,
+    searchCount = 0;
 
 //Set up icons.
 var capIcon = L.ExtraMarkers.icon({
@@ -72,6 +57,93 @@ function polyStyle(feature) {
     };
 }
 
+//On change of select, get border coords and pan to the area. 
+$('#countrySelect').change(function() {
+    countryCode = $('#countrySelect').val();
+    globalMap.removeLayer(geoJSONLayer); 
+    onSelectChange(countryCode);
+});
+
+function onSelectChange(countryCode) {
+  function removeLandmarks() {
+    if (globalMap.hasLayer(landmarkLayer)) {
+        globalMap.removeLayer(landmarkLayer);
+     }   
+}
+
+function removeHotels() {
+    if (globalMap.hasLayer(hotelLayer)) {
+        globalMap.removeLayer(hotelLayer);
+     }   
+}
+    getInfo(countryCode);
+    $.ajax({
+        url: "include/php/getCountryBorders.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            countryCode: countryCode,
+        },
+        success: function(result) {
+          if (result.status.name == "ok") {
+          let countryCoordsJSON = result['data'];
+          geoJSONLayer = L.geoJSON(countryCoordsJSON, {style: polyStyle});
+          geoJSONLayer.addTo(globalMap);
+          worldMap.fitBounds(geoJSONLayer.getCountryBorders());
+          $("#dataDisplay").hide();
+          }
+        },
+    });
+}
+
+//Update select value with map click location.
+globalMap.on('click', handleMapClick);
+
+function handleMapClick(e) {
+    let mapClickLat = e.latlng.lat;
+    let mapClickLong = e.latlng.lng;
+    $.ajax({
+        url: "include/php/reverseGeocode.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            latitude: mapClickLat,
+            longitude: mapClickLong 
+        },
+        success: function(result) {
+          if (result.status.name == "ok") {
+            countryCode = result.data[0].components["ISO_3166-1_alpha-2"];
+            worldMap.removeLayer(geoJSONLayer); 
+            updateSelect(countryCode);
+            onSelectChange(countryCode);
+          }
+        },
+    });
+}
+
+$(document).ready(function(){
+
+    $.ajax({
+        type: 'POST',
+        url: 'php/countrySelect.php',
+        dataType: 'json',
+        success: function(result){
+
+            $('#countrySelect').html('');
+
+            $.each(result.data, function(index) {
+            
+                $('#countrySelect').append($("<option>", {
+                    value: result.data[index].code,
+                    text: result.data[index].name
+                })); 
+            
+            }); 
+        },
+        error:
+    });
+  
+});
 
 /*Get location of user. */
 function getLocation() {
@@ -99,65 +171,6 @@ $(document).ready(function(){
 function updateSelect(countryCode) {
     $('#countrySelect').val(countryCode);
 }
-
-
-//On change of select, get border coords and pan to the area. 
-$('#countrySelect').change(function() {
-    countryCode = $('#countrySelect').val();
-    worldMap.removeLayer(geoJSONLayer); 
-    onSelectChange(countryCode);
-});
-
-function onSelectChange(countryCode) {
-    removeLandmarks();
-    removeHotels();
-    getInfo(countryCode);
-    $.ajax({
-        url: "include/php/getBounds.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            countryCode: countryCode,
-        },
-        success: function(result) {
-          if (result.status.name == "ok") {
-          let countryCoordsJSON = result['data'];
-          geoJSONLayer = L.geoJSON(countryCoordsJSON, {style: polyStyle});
-          geoJSONLayer.addTo(worldMap);
-          worldMap.fitBounds(geoJSONLayer.getBounds());
-          $("#dataDisplay").hide();
-          }
-        },
-    });
-}
-
-
-
-//Update select value with map click location.
-worldMap.on('click', handleMapClick);
-
-function handleMapClick(e) {
-    let mapClickLat = e.latlng.lat;
-    let mapClickLong = e.latlng.lng;
-    $.ajax({
-        url: "include/php/reverseGeocode.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            latitude: mapClickLat,
-            longitude: mapClickLong 
-        },
-        success: function(result) {
-          if (result.status.name == "ok") {
-            countryCode = result.data[0].components["ISO_3166-1_alpha-2"];
-            worldMap.removeLayer(geoJSONLayer); 
-            updateSelect(countryCode);
-            onSelectChange(countryCode);
-          }
-        },
-    });
-}
-
 
 //Perform API calls to retrieve data. 
 function getInfo(countryCode) {
@@ -206,12 +219,12 @@ function fillSelect(result) {
 function placeMarker(result) {
     let long = result.data.openCage.lnglat.lng;
     let lat = result.data.openCage.lnglat.lat;
-    if (worldMap.hasLayer(capitalMarker)) {
-        worldMap.removeLayer(capitalMarker);
+    if (globalMap.hasLayer(capitalMarker)) {
+        globalMap.removeLayer(capitalMarker);
      }            
     capitalMarker = L.marker([lat, long], {icon: capIcon});
     capitalMarker.bindPopup(result.data.restCountries.capitalCity).openPopup(); 
-    worldMap.addLayer(capitalMarker);
+    globalMap.addLayer(capitalMarker);
 }
 
 function fillTitles(result) {
@@ -286,12 +299,7 @@ function fillPeople(result) {
             $(value).html('');
           });
     }
-    if (result.status.translate == '200') {
-        $('#translation').html(result.data.translate.translatedText);
-    }
-    else {
-        $('#translation').html('')
-    }
+   
     let data2 = ['#wiki1', '#wiki2', '#wiki3'];
     if (result.status.wiki == '200') {
         $('#wiki1').html(result.data.wiki[0].title);
@@ -385,7 +393,7 @@ function getLandmarks(result) {
           landmarksArr.push(landmark);
       }
       landmarkLayer = L.markerClusterGroup();
-      landmarkLayer.addTo(worldMap);
+      landmarkLayer.addTo(globalMap);
       let landmarks = L.featureGroup(landmarksArr);
       landmarks.addTo(landmarkLayer);
       }
@@ -408,7 +416,7 @@ function getHotels(result) {
           hotelsArr.push(hotel);
       }
       hotelLayer = L.markerClusterGroup();
-      hotelLayer.addTo(worldMap);
+      hotelLayer.addTo(globalMap);
       let hotels = L.featureGroup(hotelsArr);
       hotels.addTo(hotelLayer);
       }
@@ -440,15 +448,3 @@ $("#info").click(function() {
     $("#dataDisplay").toggle();
     $("#info").css('animation', 'none');
 });
-
-function removeLandmarks() {
-    if (worldMap.hasLayer(landmarkLayer)) {
-        worldMap.removeLayer(landmarkLayer);
-     }   
-}
-
-function removeHotels() {
-    if (worldMap.hasLayer(hotelLayer)) {
-        worldMap.removeLayer(hotelLayer);
-     }   
-}
