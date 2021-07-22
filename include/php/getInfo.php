@@ -7,25 +7,6 @@ error_reporting('E_All');
 $countryCode = $_REQUEST['countryCode'];
 $count = $_REQUEST['count'];
 
-//Fill Select
-if ($count < 1) {
-    $countryData = json_decode(file_get_contents("../js/countryBorders.geo.json"), true);
-    $country = [];
-    foreach ($countryData['features'] as $feature) {
-        $temp = null;
-        $temp['code'] = $feature["properties"]['ISO_A2'];
-        $temp['name'] = $feature["properties"]['ADMIN'];
-        array_push($country, $temp);
-    }
-    usort($country, function ($item1, $item2) {
-        return $item1['name'] <=> $item2['name'];
-    });
-    
-    $output['data']['countryList'] = $country;
-}
-
-
-
 //REST Countries API Call
 $RESTStartTime = microtime(true);
 $url='https://restcountries.eu/rest/v2/alpha/' . $countryCode . '?fields=name;callingCodes;capital;population;latlng;timezones;borders;currencies;languages;flag';
