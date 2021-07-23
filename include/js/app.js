@@ -7,20 +7,20 @@ $(window).on('load', function () {
     }});
 
 //Set up global variables.
-var  globalMap = L.map('globalMap'),
+var  bounds, 
+     capitalMarker,
+     countryCode,
+     geoJSONLayer, 
+     globalMap = L.map('globalMap'),
         attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         tiles = L.tileLayer(tileURL, {attribution})
-    tiles.addTo(globalMap),
+        tiles.addTo(globalMap),
     globalMap.setMinZoom(3),
-    countryCode,
-    geoJSONLayer, 
-    bounds,
-    capitalMarker,
-    longitude,
-    latitude,
-    landmarkLayer,
     hotelLayer,
+    landmarkLayer,
+    latitude,
+    longitude,
     searchCount = 0;
 
 //Set up icons.
