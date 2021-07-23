@@ -89,7 +89,7 @@ function removeHotels() {
           let countryCoordsJSON = result['data'];
           geoJSONLayer = L.geoJSON(countryCoordsJSON, {style: polyStyle});
           geoJSONLayer.addTo(globalMap);
-          worldMap.fitBounds(geoJSONLayer.getCountryBorders());
+          globalMap.fitBounds(geoJSONLayer.getCountryBorders());
           $("#dataDisplay").hide();
           }
         },
@@ -113,7 +113,7 @@ function handleMapClick(e) {
         success: function(result) {
           if (result.status.name == "ok") {
             countryCode = result.data[0].components["ISO_3166-1_alpha-2"];
-            worldMap.removeLayer(geoJSONLayer); 
+            globalMap.removeLayer(geoJSONLayer); 
             updateSelect(countryCode);
             onSelectChange(countryCode);
           }
