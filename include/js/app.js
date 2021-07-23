@@ -7,11 +7,11 @@ $(window).on('load', function () {
     }});
 
 //Set up global variables.
-var  globalMap = L.map('globalMap');
-    const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-    const tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    const tiles = L.tileLayer(tileURL, {attribution});
-    tiles.addTo(worldMap);
+var  globalMap = L.map('globalMap'),
+    const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    const tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    const tiles = L.tileLayer(tileURL, {attribution})
+    tiles.addTo(globalMap),
     globalMap.setMinZoom(3),
     countryCode,
     geoJSONLayer, 
@@ -140,7 +140,6 @@ $(document).ready(function(){
             
             }); 
         },
-        error:
     });
   
 });
