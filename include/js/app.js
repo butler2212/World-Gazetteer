@@ -17,8 +17,8 @@ var  bounds,
         tiles = L.tileLayer(tileURL, {attribution})
         tiles.addTo(globalMap),
     globalMap.setMinZoom(3),
-    hotelLayer,
-    landmarkLayer,
+    hotelLayer = L.markerClusterGroup(), 
+    landmarkLayer = L.markerClusterGroup(),
     latitude,
     longitude,
     searchCount = 0;
