@@ -19,8 +19,8 @@ var  bounds,
     globalMap.setMinZoom(3),
     hotelLayer = L.markerClusterGroup(), 
     landmarkLayer = L.markerClusterGroup(),
-    latitude,
-    longitude,
+    latitude = position.coords.latitude,
+    longitude = position.coords.longitude,
     searchCount = 0;
 
 //Set up icons.
