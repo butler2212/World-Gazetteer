@@ -20,7 +20,7 @@ var  bounds,
     hotelLayer = L.markerClusterGroup(), 
     landmarkLayer = L.markerClusterGroup(),
     latitude,
-    longitude,
+    longitude, 
     searchCount = 0;
 
 //Set up icons.
@@ -136,40 +136,53 @@ $(document).ready(function(){
                 $('#countrySelect').append($("<option>", {
                     value: result.data[index].code,
                     text: result.data[index].name
-                })); 
+                }));
             
-            }); 
+            });
         },
     });
-  
-});
+})
 
 /*Get location of user. */
 function getLocation() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(locationSuccess, locationError);
+      navigator.geolocation.getCurrentPosition(locationSuccess);
     }
   }
 
 function locationSuccess(pos) {
-    updateSelect(countryCode);
-    onSelectChange(countryCode);
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
+
+    $.ajax({
+        url: "include/php/getCountryCode.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            lat: latitude,
+            lng: longitude
+        },
+        success: function(result) {
+
+            console.log(result);
+
+            if (result.status.name == "ok") {
+
+                $('#countrySelect').val(isoCode).change();
+            }
+        
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+        }
+    }); 
 }
 
-function locationError(err) {
-    countryCode = 'GB';
-    updateSelect(countryCode);
-    onSelectChange(countryCode);
-}
 
 $(document).ready(function(){
     getLocation();
-});
+})
 
-//Update select value.
-function updateSelect(countryCode) {
-    $('#countrySelect').val(countryCode);
-}
 
 //Perform API calls to retrieve data. 
 function getInfo(countryCode) {
