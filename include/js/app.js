@@ -11,7 +11,7 @@ var  bounds,
      capitalMarker,
      countryCode,
      geoJSONLayer, 
-     globalMap = L.map('globalMap'),
+     globalMap = L.map('globalMap').setView([53.800755, -1.549077], 6),
         attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         tiles = L.tileLayer(tileURL, {attribution})
@@ -19,8 +19,8 @@ var  bounds,
     globalMap.setMinZoom(3),
     hotelLayer = L.markerClusterGroup(), 
     landmarkLayer = L.markerClusterGroup(),
-    latitude,
-    longitude, 
+    latitude = 0.0,
+    longitude = 0.0, 
     searchCount = 0;
 
 //Set up icons.
@@ -60,7 +60,6 @@ function polyStyle(feature) {
 //On change of select, get border coords and pan to the area. 
 $('#countrySelect').change(function() {
     countryCode = $('#countrySelect').val();
-    globalMap.removeLayer(geoJSONLayer); 
     onSelectChange(countryCode);
 });
 
@@ -89,7 +88,7 @@ function removeHotels() {
           let countryCoordsJSON = result['data'];
           geoJSONLayer = L.geoJSON(countryCoordsJSON, {style: polyStyle});
           geoJSONLayer.addTo(globalMap);
-          globalMap.fitBounds(geoJSONLayer.getCountryBorders());
+          globalMap.fitBounds(geoJSONLayer.getBounds());
           $("#dataDisplay").hide();
           }
         },
@@ -125,7 +124,7 @@ $(document).ready(function(){
 
     $.ajax({
         type: 'POST',
-        url: 'php/countrySelect.php',
+        url: 'include/php/countrySelect.php',
         dataType: 'json',
         success: function(result){
 
@@ -146,13 +145,11 @@ $(document).ready(function(){
 /*Get location of user. */
 function getLocation() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(locationSuccess);
+      navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {timeout:5000});
     }
   }
 
 function locationSuccess(pos) {
-    latitude = position.coords.latitude;
-    longitude = position.coords.longitude;
 
     $.ajax({
         url: "include/php/getCountryCode.php",
@@ -168,7 +165,7 @@ function locationSuccess(pos) {
 
             if (result.status.name == "ok") {
 
-                $('#countrySelect').val(isoCode).change();
+                $('#countrySelect').val(countryCode).change();
             }
         
         },
@@ -176,6 +173,12 @@ function locationSuccess(pos) {
             // your error code
         }
     }); 
+}
+
+function locationError(err) {
+    countryCode = 'GB';
+    updateSelect(countryCode);
+    onSelectChange(countryCode);
 }
 
 
