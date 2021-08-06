@@ -20,7 +20,7 @@ $result=curl_exec($ch);
 curl_close($ch);
 $decodeRestCountries = json_decode($result,true);
 $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-if (result === 'false') {
+if ($result === 'false') {
     $error_msg = curl_error($ch);
     $output['status']['restCountries'] = $responseCode;
 }
