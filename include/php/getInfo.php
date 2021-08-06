@@ -47,7 +47,7 @@ else {
 
 //OpenCage API Call
 $openCageStartTime = microtime(true);
-$url='https://api.opencagedata.com/geocode/v1/json?q=' . $capitalCity . '&key=&limit=1';
+$url='https://api.opencagedata.com/geocode/v1/json?q=' . $capitalCity . '&key=15f42192f2eb48ae9ea03a488b763e6e&limit=1';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_URL, $url);
@@ -77,7 +77,7 @@ else {
 
 
 //Get Landmarks
-$url = 'https://discover.search.hereapi.com/v1/discover?apiKey==historical+monument&in=circle:' . $capitalLat . ',' . $capitalLong . ';r=10000&limit=10&lang=en';
+$url = 'https://discover.search.hereapi.com/v1/discover?apiKey=3S-zrJQXSo9U-XZPmLE5hNkbu1AFhh6RCkiYfDXgfWM&q=historical+monument&in=circle:' . $capitalLat . ',' . $capitalLong . ';r=1000000&limit=50&lang=en';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_URL, $url);
@@ -97,12 +97,32 @@ else {
     $output['data']['landMarks'] = $decodeLandmarks;
 }
 
+//Get Hotels
+$url = 'https://discover.search.hereapi.com/v1/discover?apiKey=3S-zrJQXSo9U-XZPmLE5hNkbu1AFhh6RCkiYfDXgfWM&q=hotels&in=circle:' . $capitalLat . ',' . $capitalLong . ';r=1000000&limit=50&lang=en';
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+curl_setopt($ch, CURLOPT_FAILONERROR, true);
+$result=curl_exec($ch);
+curl_close($ch);
+$decodeHotels = json_decode($result,true);
+$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+if ($result === false) {
+    $error_msg = curl_error($ch);
+    $output['status']['hotels'] = $responseCode;
+}
+else {
+    $output['status']['hotels'] = '200';
+    $output['data']['hotels'] = $decodeHotels;
+}
 
 
 
 //Open Weather API Call 
 $openWeatherStartTime = microtime(true);
-$url='api.openweathermap.org/data/2.5/weather?q=' . $capitalCity . '&appid=&units=metric';
+$url='api.openweathermap.org/data/2.5/weather?q=' . $capitalCity . '&appid=eba38bbee9357eefd11c81f48c80296d&units=metric';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_URL, $url);
@@ -137,7 +157,7 @@ curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Client-ID "]);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Client-ID 29c53e267ee3462"]);
 curl_setopt($ch, CURLOPT_FAILONERROR, true);
 $result=curl_exec($ch);
 curl_close($ch);
@@ -185,7 +205,7 @@ else {
 
 //Covid-19 Global Tracker API call
 $covidStartTime = microtime(true);
-$url = 'https://covid-19-data.p.rapidapi.com/country/code?code=' . $countryCode;
+$url = 'https://covid-19-data.p.rapidapi.com/country/code?code=' . $countryCode . '&date=2020-06-10';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
@@ -193,7 +213,7 @@ curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-curl_setopt($ch, CURLOPT_HTTPHEADER, ["x-rapidapi-host: covid-19-data.p.rapidapi.com", "x-rapidapi-key: "]);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ["x-rapidapi-host: covid-19-data.p.rapidapi.com", "x-rapidapi-key: 57f3999ddamshed3b5eb66730263p1a5d3cjsn452d978dc8dd"]);
 curl_setopt($ch, CURLOPT_FAILONERROR, true);
 $result = curl_exec($ch);
 curl_close($ch);
@@ -208,6 +228,9 @@ else {
     $output['data']['covid'] = $decodeCovid; 
     $output['data']['covid']['executedIn'] = intval((microtime(true) - $covidStartTime) * 1000) . " ms";
 }
+
+
+
 
 
 //Open Exchange Rates API Call
