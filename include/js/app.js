@@ -151,8 +151,12 @@ function getLocation() {
 
 function locationSuccess(pos) {
     
-   var lat = pos.coords.latitude;
-    var lng = pos.coords.longitude;
+     (position) => {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+    }
 
     $.ajax({
         url: "include/php/getCountryCode.php",
