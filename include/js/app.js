@@ -151,20 +151,13 @@ function getLocation() {
 
 function locationSuccess(pos) {
     
-     (position) => {
-        const pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-    }
-
-    $.ajax({
+      $.ajax({
         url: "include/php/getCountryCode.php",
         type: 'POST',
         dataType: 'json',
         data: {
-            lat,
-            lng
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
         },
         success: function(result) {
 
