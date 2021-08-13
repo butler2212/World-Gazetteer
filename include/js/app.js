@@ -198,8 +198,8 @@ function getInfo(countryCode) {
             count: searchCount
         },
         success: function(result) {
-            longitude;
-            latitude;
+            longitude = result.data.openCage.lnglat.lng;
+            latitude = result.data.openCage.lnglat.lat;
             fillSelect(result);
             getLandmarks(result);
             getHotels(result);
