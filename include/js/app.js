@@ -57,67 +57,17 @@ function polyStyle(feature) {
     };
 }
 
-//On change of select, get border coords and pan to the area. 
-$('#countrySelect').change(function() {
-    countryCode = $('#countrySelect').val();
-    onSelectChange(countryCode);
-});
-
-function onSelectChange(countryCode) {
-  function removeLandmarks() {
-    if (globalMap.hasLayer(landmarkLayer)) {
-        globalMap.removeLayer(landmarkLayer);
-     }   
-}
-
-function removeHotels() {
-    if (globalMap.hasLayer(hotelLayer)) {
-        globalMap.removeLayer(hotelLayer);
-     }   
-}
-    getInfo(countryCode);
-    $.ajax({
-        url: "include/php/getCountryBorders.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            countryCode: countryCode,
-        },
-        success: function(result) {
-          if (result.status.name == "ok") {
-          let countryCoordsJSON = result['data'];
-          geoJSONLayer = L.geoJSON(countryCoordsJSON, {style: polyStyle});
-          geoJSONLayer.addTo(globalMap);
-          globalMap.fitBounds(geoJSONLayer.getBounds());
-          $("#dataDisplay").hide();
-          }
-        },
-    });
-}
-
-//Update select value with map click location.
-globalMap.on('click', handleMapClick);
-
-function handleMapClick(e) {
-    let mapClickLat = e.latlng.lat;
-    let mapClickLong = e.latlng.lng;
-    $.ajax({
-        url: "include/php/reverseGeocode.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            latitude: mapClickLat,
-            longitude: mapClickLong 
-        },
-        success: function(result) {
-          if (result.status.name == "ok") {
-            countryCode = result.data[0].components["ISO_3166-1_alpha-2"];
-            globalMap.removeLayer(geoJSONLayer); 
-            updateSelect(countryCode);
-            onSelectChange(countryCode);
-          }
-        },
-    });
+//Fill in Data
+function fillSelect(result) {
+    if (result.data.countryList) {
+        $('#countrySelect').html('');
+        $.each(result.data.countryList, function(index) {
+            $('#countrySelect').append($("<option>", {
+                value: result.data.countryList[index].code,
+                text: result.data.countryList[index].name
+            })); 
+        });
+    }
 }
 
 $(document).ready(function(){
@@ -164,13 +114,13 @@ function locationSuccess(pos) {
             console.log(result);
 
             if (result.status.name == "ok") {
-                let countryCode = result.data.decodeCountryCode;
                 $('#countrySelect').val(countryCode).change();
             }
         
         },
         error: function(jqXHR, textStatus, errorThrown) {
             // your error code
+            console.log(textStatus, errorThrown);
         }
     }); 
 }
@@ -185,6 +135,77 @@ function locationError(err) {
 $(document).ready(function(){
     getLocation();
 })
+
+//On change of select, get border coords and pan to the area. 
+$('#countrySelect').change(function() {
+    countryCode = $('#countrySelect').val();
+    onSelectChange(countryCode);
+});
+
+function onSelectChange(countryCode) {
+  function removeLandmarks() {
+    if (globalMap.hasLayer(landmarkLayer)) {
+        globalMap.removeLayer(landmarkLayer);
+     }   
+}
+
+function removeHotels() {
+    if (globalMap.hasLayer(hotelLayer)) {
+        globalMap.removeLayer(hotelLayer);
+     }   
+}
+    getInfo(countryCode);
+    $.ajax({
+        url: "include/php/getCountryBorders.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            countryCode: countryCode,
+        },
+        success: function(result) {
+          if (result.status.name == "ok") {
+          let countryCoordsJSON = result['data'];
+          geoJSONLayer = L.geoJSON(countryCoordsJSON, {style: polyStyle});
+          geoJSONLayer.addTo(globalMap);
+          globalMap.fitBounds(geoJSONLayer.getBounds());
+          $("#dataDisplay").hide();
+          }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+            console.log(textStatus, errorThrown);
+        }
+    });
+}
+
+//Update select value with map click location.
+globalMap.on('click', handleMapClick);
+
+function handleMapClick(e) {
+    let mapClickLat = e.latlng.lat;
+    let mapClickLong = e.latlng.lng;
+    $.ajax({
+        url: "include/php/reverseGeocode.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            latitude: mapClickLat,
+            longitude: mapClickLong 
+        },
+        success: function(result) {
+          if (result.status.name == "ok") {
+            countryCode = result.data[0].components["ISO_3166-1_alpha-2"];
+            globalMap.removeLayer(geoJSONLayer); 
+            updateSelect(countryCode);
+            onSelectChange(countryCode);
+          }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+            console.log(textStatus, errorThrown);
+        }
+    });
+}
 
 
 //Perform API calls to retrieve data. 
@@ -212,23 +233,13 @@ function getInfo(countryCode) {
             fillCovid(result);
             searchCount++;
         },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+            console.log(textStatus, errorThrown);
+        }
     });
 }
 
-
-
-//Fill in Data
-function fillSelect(result) {
-    if (result.data.countryList) {
-        $('#countrySelect').html('');
-        $.each(result.data.countryList, function(index) {
-            $('#countrySelect').append($("<option>", {
-                value: result.data.countryList[index].code,
-                text: result.data.countryList[index].name
-            })); 
-        });
-    }
-}
 
 
 function placeMarker(result) {
