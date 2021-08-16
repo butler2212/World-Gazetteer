@@ -89,6 +89,9 @@ $(document).ready(function(){
             
             });
         },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // your error code
+            console.log(textStatus, errorThrown);
     });
 })
 
