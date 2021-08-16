@@ -71,13 +71,13 @@ function fillSelect(result) {
 }
 
 $(document).ready(function(){
+    fillSelect;
 
     $.ajax({
         type: 'POST',
         url: 'include/php/countrySelect.php',
         dataType: 'json',
         success: function(result){
-            fillSelect(result);
             $('#countrySelect').html('');
 
             $.each(result.data, function(index) {
