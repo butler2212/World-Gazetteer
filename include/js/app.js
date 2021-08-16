@@ -71,6 +71,7 @@ function fillSelect(result) {
 }
 
 $(document).ready(function(){
+fillSelect(result);
 
     $.ajax({
         type: 'POST',
