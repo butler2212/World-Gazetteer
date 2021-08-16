@@ -150,8 +150,8 @@ function getLocation() {
   }
 
 function locationSuccess(pos) {
-    
-      $.ajax({
+
+    $.ajax({
         url: "include/php/getCountryCode.php",
         type: 'POST',
         dataType: 'json',
@@ -164,7 +164,7 @@ function locationSuccess(pos) {
             console.log(result);
 
             if (result.status.name == "ok") {
-
+                let countryCode = result.data.decodeCountryCode;
                 $('#countrySelect').val(countryCode).change();
             }
         
