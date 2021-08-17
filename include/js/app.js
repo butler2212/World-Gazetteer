@@ -237,10 +237,7 @@ function getInfo(countryCode) {
             fillCovid(result);
             searchCount++;
         },
-        error: function(jqXHR, textStatus, errorThrown) {
-            // your error code
-            console.log(textStatus, errorThrown);
-        }
+       error: (x,y,z)=> {console.log("Errrror", x,y,z)}
     });
 }
 
