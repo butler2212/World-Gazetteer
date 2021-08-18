@@ -116,6 +116,7 @@ function locationSuccess(pos) {
         success: function(result) {
 
             console.log(result);
+             countryCode= result.data.countryCode;
 
             if (result.status.name == "ok") {
                 $('#countrySelect').val(countryCode).change();
