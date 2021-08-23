@@ -143,7 +143,6 @@ $(document).ready(function(){
 
 //On change of select, get border coords and pan to the area. 
 $('#countrySelect').change(function() {
-    countryCode = $('#countrySelect').val();
     onSelectChange(countryCode);
 });
 
