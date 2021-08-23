@@ -26,14 +26,7 @@ if ($result === 'false') {
 }
 else {
     $output['status']['restCountries'] = '200';
-    $output['data']['restCountries']['name'] = $decodeRestCountries['name'];
-    $output['data']['restCountries']['capitalCity'] = $decodeRestCountries['capital'];
-    $output['data']['restCountries']['borders'] = $decodeRestCountries['borders'];
-    $output['data']['restCountries']['callingCodes'] = $decodeRestCountries['callingCodes'];
-    $output['data']['restCountries']['currencies'] = $decodeRestCountries['currencies'];
-    $output['data']['restCountries']['languages'] = $decodeRestCountries['languages'];
-    $output['data']['restCountries']['population'] = $decodeRestCountries['population'];
-    $output['data']['restCountries']['flag'] = $decodeRestCountries['flag'];
+    $output['data']['restCountries'] = $decodeRestCountries;
     $output['data']['restCountries']['executedIn'] = intval((microtime(true) - $RESTStartTime) * 1000) . " ms";
 }
     //REST Countries Variables for use in other API calls
