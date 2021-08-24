@@ -141,6 +141,11 @@ $(document).ready(function(){
     getLocation();
 })
 
+//Update select value.
+function updateSelect(countryCode) {
+    $('#countrySelect').val(countryCode);
+}
+
 //On change of select, get border coords and pan to the area. 
 $('#countrySelect').change(function() {
     onSelectChange(countryCode);
