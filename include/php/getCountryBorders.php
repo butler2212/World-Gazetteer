@@ -8,7 +8,7 @@ ini_set('memory_limit', '1024M');
     $baseArray = $json['features'];
 
     foreach ($baseArray as $key => $value) {;
-      if ($value['properties']['ISO_A2'] == $countryCode) {
+      if ($value['properties']['iso_a2'] == $countryCode) {
         $result = $value;
       }
     }
