@@ -143,6 +143,7 @@ $(document).ready(function(){
 
 //Update select value.
 function updateSelect(countryCode) {
+    globalMap.removeLayer(geoJSONLayer); 
     $('#countrySelect').val(countryCode);
 }
 
