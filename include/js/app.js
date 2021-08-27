@@ -116,8 +116,8 @@ function locationSuccess(pos) {
         success: function(result) {
 
             console.log(result);
-             countryCode= result.data.countryCode;
-
+            countryCode= result.data.countryCode;
+                
             if (result.status.name == "ok") {
                 $('#countrySelect').val(countryCode).change();
             }
@@ -143,7 +143,6 @@ $(document).ready(function(){
 
 //Update select value.
 function updateSelect(countryCode) {
-    globalMap.removeLayer(geoJSONLayer); 
     $('#countrySelect').val(countryCode);
 }
 
@@ -153,6 +152,7 @@ $('#countrySelect').change(function() {
 });
 
 function onSelectChange(countryCode) {
+    $('#countrySelect').val(countryCode).change();
   function removeLandmarks() {
     if (globalMap.hasLayer(landmarkLayer)) {
         globalMap.removeLayer(landmarkLayer);
@@ -231,10 +231,10 @@ function getInfo(countryCode) {
         success: function(result) {
             longitude = result.data.openCage.lnglat.lng;
             latitude = result.data.openCage.lnglat.lat;
+            placeMarker(result);
             fillSelect(result);
             getLandmarks(result);
             getHotels(result);
-            placeMarker(result);
             fillTitles(result);
             fillStats(result);
             fillWeather(result);
@@ -243,7 +243,7 @@ function getInfo(countryCode) {
             fillCovid(result);
             searchCount++;
         },
-       error: (x,y,z)=> {console.log("Errrror", x,y,z)}
+         error: (x,y,z)=> {console.log("Errrror", x,y,z)}
     });
 }
 
