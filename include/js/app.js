@@ -153,6 +153,8 @@ $('#countrySelect').change(function() {
 
 function onSelectChange(countryCode) {
     $('#countrySelect').val(countryCode).change();
+    worldMap.removeLayer(geoJSONLayer);
+
   function removeLandmarks() {
     if (globalMap.hasLayer(landmarkLayer)) {
         globalMap.removeLayer(landmarkLayer);
