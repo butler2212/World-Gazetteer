@@ -148,7 +148,7 @@ function updateSelect(countryCode) {
 
 //On change of select, get border coords and pan to the area. 
 $('#countrySelect').change(function() {
-    countryCode = $('#countrySelect').val();
+    countryCode = $(this).val();
     worldMap.removeLayer(geoJSONLayer); 
     onSelectChange(countryCode);
 });
