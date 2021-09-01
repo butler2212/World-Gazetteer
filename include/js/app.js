@@ -148,12 +148,12 @@ function updateSelect(countryCode) {
 
 //On change of select, get border coords and pan to the area. 
 $('#countrySelect').change(function() {
+    countryCode = $('#countrySelect').val();
+    worldMap.removeLayer(geoJSONLayer); 
     onSelectChange(countryCode);
 });
 
 function onSelectChange(countryCode) {
-    $('#countrySelect').val(countryCode).change();
-    worldMap.removeLayer(geoJSONLayer);
 
   function removeLandmarks() {
     if (globalMap.hasLayer(landmarkLayer)) {
