@@ -149,23 +149,22 @@ function updateSelect(countryCode) {
 //On change of select, get border coords and pan to the area. 
 $('#countrySelect').change(function() {
     countryCode = $(this).val();
-    worldMap.removeLayer(geoJSONLayer); 
     onSelectChange(countryCode);
 });
 
 function onSelectChange(countryCode) {
-
-  function removeLandmarks() {
     if (globalMap.hasLayer(landmarkLayer)) {
         globalMap.removeLayer(landmarkLayer);
      }   
-}
 
-function removeHotels() {
     if (globalMap.hasLayer(hotelLayer)) {
         globalMap.removeLayer(hotelLayer);
      }   
-}
+
+     if (globalMap.hasLayer(geoJSONLayer)) {
+        globalMap.removeLayer(geoJSONLayer);
+     } 
+      
     getInfo(countryCode);
     $.ajax({
         url: "include/php/getCountryBorders.php",
