@@ -27,6 +27,7 @@ if ($result === 'false') {
 else {
     $output['status']['restCountries'] = '200';
     $output['data']['restCountries'] = $decodeRestCountries;
+    $output['data']['restCountries']['capitalCity'] = $decodeRestCountries['capital'];
     $output['data']['restCountries']['executedIn'] = intval((microtime(true) - $RESTStartTime) * 1000) . " ms";
 }
     //REST Countries Variables for use in other API calls
